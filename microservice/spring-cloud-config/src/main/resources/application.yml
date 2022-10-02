@@ -1,0 +1,50 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: spring-config-server
+  profiles:
+    active: native
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          introspection-uri: http://localhost:8445/realms/spring-realm/protocol/openid-connect/token/introspect
+          client-id: spring-cloud-config
+          client-secret: RqoeADkizYWM8kffpvpPtZkQfaD60XmD
+  cloud:
+    discovery:
+      enabled: true
+    config:
+      server:
+        native:
+          searchLocations:
+            - classpath:/config
+            - classpath:/config/{application}/{profile}
+  zipkin:
+    baseUrl: http://localhost:9411
+  sleuth:
+    sampler:
+      probability: 1.0
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+
+  instance:
+    preferIpAddress: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 20
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+

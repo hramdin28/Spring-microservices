@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: discovery-service
+  config:
+    activate:
+      on-profile: prod
+    import: optional:configserver:http://configserver:8888
+  cloud:
+    config:
+      username: root
+      password: s3cr3t

@@ -44,16 +44,8 @@ services:
       - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
     networks:
       - myMicroServiceNetwork
-
-  eureka:
-    image: localhost:5000/discovery:latest
-    container_name: eureka
-    networks:
-      - myMicroServiceNetwork
-    entrypoint: [ "/opt/keycloak/bin/kc.sh", "start-dev", "--import-realm" ]
-    ports:
-      - "8761:9411"
-
+      
+      
 volumes:
   postgres_data:
 

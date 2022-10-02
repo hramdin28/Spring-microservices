@@ -1,0 +1,31 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          introspection-uri: ${custom.keycloak.tokenIntrospect}
+          client-id: ${custom.keycloak.auth.clientIdValue}
+          client-secret: ${custom.keycloak.auth.clientSecretValue}
+  cloud:
+    config:
+      discovery:
+        service-id: spring-config-server
+        enabled: true
+      uri: spring-config-server
+      name: producer
+
+
+custom:
+  keycloak:
+    enabled: true
+    uri: http://localhost:8445/realms
+    realm: spring-realm
+    tokenUri: ${custom.keycloak.uri}/${custom.keycloak.realm}/protocol/openid-connect/token
+    tokenIntrospect: ${custom.keycloak.tokenUri}/introspect
+    auth:
+      clientIdKey: client_id
+      clientIdValue: producer
+      clientSecretKey: client_secret
+      clientSecretValue: vNKDLuo6wSv6RFtk5eFfSn6MMQoXLzFb
+      grantTypeKey: grant_type
+      grantTypeValue: client_credentials

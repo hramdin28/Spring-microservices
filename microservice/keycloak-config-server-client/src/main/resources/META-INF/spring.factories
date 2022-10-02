@@ -1,0 +1,3 @@
+org.springframework.cloud.bootstrap.BootstrapConfiguration=\
+  com.demo.keycloakconfigserverclient.config.CustomConfigServiceBootstrapConfiguration, \
+  com.demo.keycloakconfigserverclient.model.KeycloakCustom
