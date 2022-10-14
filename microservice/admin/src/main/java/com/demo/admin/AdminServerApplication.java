@@ -1,4 +1,4 @@
-package com.demi.admin;
+package com.demo.admin;
 
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import org.springframework.boot.SpringApplication;

@@ -11,7 +11,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>keycloak-config-server-client</name>
 	<description>Config server client for keycloak</description>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
+	<properties>
+		<spring-boot.repackage.skip>true</spring-boot.repackage.skip>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -23,4 +26,16 @@
 			<optional>true</optional>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>${google.jib.version}</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

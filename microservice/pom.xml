@@ -80,6 +80,9 @@
                                     <tag>${project.version}</tag>
                                 </tags>
                             </to>
+                            <container>
+                                <creationTime>${maven.build.timestamp}</creationTime>
+                            </container>
                         </configuration>
                         <executions>
                             <execution>
@@ -100,5 +103,6 @@
         <module>keycloak-config-server-client</module>
         <module>producer</module>
         <module>consumer</module>
+        <module>admin</module>
     </modules>
 </project>
