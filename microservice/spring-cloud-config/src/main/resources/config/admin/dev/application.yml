@@ -18,6 +18,7 @@ eureka:
     lease-renewal-interval-in-seconds: 10
     lease-expiration-duration-in-seconds: 20
 
+
 management:
   endpoints:
     web:

@@ -12,7 +12,7 @@ spring:
         service-id: spring-config-server
         enabled: true
       uri: spring-config-server
-      name: consumer
+      name: admin
 
 
 custom:

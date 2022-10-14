@@ -30,8 +30,8 @@ import java.util.Optional;
 public class CustomConfigServiceBootstrapConfiguration {
     private final KeycloakCustom keycloakCustom;
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomConfigServiceBootstrapConfiguration.class);
-    private static final String HEADER = "Authorization";
-    private static final String SPACE = " ";
+    public static final String HEADER = "Authorization";
+    public static final String SPACE = " ";
     private static final String ERROR_NO_KEYCLOAK_RESPONSE = "Error: No response found";
 
     public CustomConfigServiceBootstrapConfiguration(KeycloakCustom keycloakCustom) {
@@ -50,6 +50,23 @@ public class CustomConfigServiceBootstrapConfiguration {
         var configServicePropertySourceLocator = new ConfigServicePropertySourceLocator(configClientProperties);
         configServicePropertySourceLocator.setRestTemplate(customRestTemplate());
         return configServicePropertySourceLocator;
+    }
+
+    public KeycloakTokenResponse getAuthTokenFromKeycloak() throws KeycloakCustomException {
+        var restTemplate = new RestTemplate();
+
+        var request = buildRequest();
+
+        try {
+            var respo = restTemplate.exchange(
+                    keycloakCustom.getTokenUri(),
+                    HttpMethod.POST, request, KeycloakTokenResponse.class);
+            return Optional.ofNullable(respo.getBody())
+                    .orElseThrow(() -> new KeycloakCustomException(ERROR_NO_KEYCLOAK_RESPONSE));
+
+        } catch (RestClientResponseException error) {
+            throw new KeycloakCustomException(error.getLocalizedMessage());
+        }
     }
 
     private List<Header> headers(KeycloakTokenResponse response) {
@@ -78,23 +95,6 @@ public class CustomConfigServiceBootstrapConfiguration {
         mapForm.add(keycloakCustom.getAuth().grantTypeKey(), keycloakCustom.getAuth().grantTypeValue());
 
         return new HttpEntity<>(mapForm, headers);
-    }
-
-    private KeycloakTokenResponse getAuthTokenFromKeycloak() throws KeycloakCustomException {
-        var restTemplate = new RestTemplate();
-
-        var request = buildRequest();
-
-        try {
-            var respo = restTemplate.exchange(
-                    keycloakCustom.getTokenUri(),
-                    HttpMethod.POST, request, KeycloakTokenResponse.class);
-            return Optional.ofNullable(respo.getBody())
-                    .orElseThrow(() -> new KeycloakCustomException(ERROR_NO_KEYCLOAK_RESPONSE));
-
-        } catch (RestClientResponseException error) {
-            throw new KeycloakCustomException(error.getLocalizedMessage());
-        }
     }
 
 }

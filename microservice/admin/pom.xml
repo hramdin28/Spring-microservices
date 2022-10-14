@@ -13,6 +13,7 @@
     <description>Demo project for Spring Admin server</description>
     <properties>
         <spring-boot-admin.version>2.7.4</spring-boot-admin.version>
+        <keycloak-config-server-client.version>0.0.1-SNAPSHOT</keycloak-config-server-client.version>
     </properties>
     <dependencies>
         <dependency>
@@ -34,6 +35,11 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.demo</groupId>
+            <artifactId>keycloak-config-server-client</artifactId>
+            <version>${keycloak-config-server-client.version}</version>
         </dependency>
     </dependencies>
     <dependencyManagement>
