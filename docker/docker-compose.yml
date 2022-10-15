@@ -1,9 +1,10 @@
-version: "3.7"
+version: "3.9"
 
 services:
   zipkin:
     image: openzipkin/zipkin
     container_name: zipkin
+    profiles: ["common"]
     networks:
       - myMicroServiceNetwork
     ports:
@@ -12,6 +13,7 @@ services:
   postgres:
     image: postgres:14.5-bullseye
     container_name: db
+    profiles: ["common"]
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -24,6 +26,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:19.0.1
     container_name: keycloak
+    profiles: ["common"]
     environment:
       KC_DB: postgres
       KC_DB_USERNAME: ${DATABASE_USER}
@@ -45,6 +48,91 @@ services:
     networks:
       - myMicroServiceNetwork
       
+  eureka:
+    image: discovery:latest
+    container_name: eureka
+    profiles: ["app"]
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    depends_on:
+      - keycloak
+    networks:
+      - myMicroServiceNetwork
+    ports:
+      - "8761:8761"      
+   
+  configserver:
+    image: spring-config-server:latest
+    container_name: configserver
+    profiles: ["app"]
+    depends_on:
+      - eureka
+    networks:
+      - myMicroServiceNetwork
+    environment:
+      SPRING_PROFILES_ACTIVE: native
+      SPRING_CONFIG_LOCATION: /app/application.yml
+    volumes:
+      - ./spring-config-server/application.yml:/app/application.yml
+    ports:
+      - "8888:8888"     
+      
+  admin:
+    image: admin:latest
+    container_name: admin
+    profiles: ["app"]
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CLOUD_BOOTSTRAP_ENABLED: "true"
+    depends_on:
+      - configserver
+    networks:
+      - myMicroServiceNetwork
+    ports:
+      - "8093:8093"
+
+  consumer:
+    image: consumer:latest
+    container_name: consumer
+    profiles: ["app"]
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CLOUD_BOOTSTRAP_ENABLED: "true"
+    depends_on:
+      - configserver
+    networks:
+      - myMicroServiceNetwork
+    ports:
+      - "8082:8082"
+      
+  producer:
+    image: producer:latest
+    container_name: producer
+    profiles: ["app"]
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CLOUD_BOOTSTRAP_ENABLED: "true"
+    depends_on:
+      - configserver
+    networks:
+      - myMicroServiceNetwork
+    ports:
+      - "8083:8081"    
+
+  producer1:
+    image: producer:latest
+    container_name: producer1
+    profiles: ["app"]
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CLOUD_BOOTSTRAP_ENABLED: "true"
+      SERVER_PORT: 8082
+    depends_on:
+      - configserver
+    networks:
+      - myMicroServiceNetwork
+    ports:
+      - "8084:8082"    
       
 volumes:
   postgres_data:

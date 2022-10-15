@@ -2,6 +2,8 @@ server:
   port: 8761
 
 spring:
+  application:
+    name: discovery-service
   zipkin:
     baseUrl: http://localhost:9411
   sleuth:
@@ -12,3 +14,5 @@ eureka:
   client:
     registerWithEureka: true
     fetchRegistry: false
+  instance:
+    preferIpAddress: true

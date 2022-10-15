@@ -10,7 +10,7 @@ spring:
     oauth2:
       resourceserver:
         opaquetoken:
-          introspection-uri: http://localhost:8080/realms/spring-realm/protocol/openid-connect/token/introspect
+          introspection-uri: http://keycloak:8080/realms/spring-realm/protocol/openid-connect/token/introspect
           client-id: spring-cloud-config
           client-secret: RqoeADkizYWM8kffpvpPtZkQfaD60XmD
   cloud:
@@ -23,7 +23,7 @@ spring:
             - classpath:/config
             - classpath:/config/{application}/{profile}
   zipkin:
-    baseUrl: http://localhost:9411
+    baseUrl: http://zipkin:9411
   sleuth:
     sampler:
       probability: 1.0
@@ -32,7 +32,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka:8761/eureka
   instance:
     preferIpAddress: true
     lease-renewal-interval-in-seconds: 10
